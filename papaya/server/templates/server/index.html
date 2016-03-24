@@ -1,0 +1,10 @@
+{% extends "server/base.html" %}
+{% load server_tags %}
+
+{% block content %}
+<h1>Welcome {{ user.first_name }}</h1>
+
+<p>
+Your OpenID is <b>{% openid_url user %}</b>
+</p>
+{% endblock %}

@@ -1,0 +1,9 @@
+include INSTALL LICENSE README.rst
+include requirements*.txt
+
+graft papaya
+global-exclude *.py[cod] __pycache__
+
+prune docs
+exclude example_settings.ini Makefile manage.py
+exclude .coveragerc release.conf runtests.py

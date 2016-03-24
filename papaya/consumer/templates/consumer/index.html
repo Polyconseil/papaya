@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<h1>{% blocktrans %}Log in using OpenID{% endblocktrans %}</h1>
+
+{% if url %}
+  <p>
+    {% blocktrans %}OpenID authentication succeeded; you authenticated as{% endblocktrans %}
+    <a href="{{ url }}">{{ url|escape }}</a>.
+  </p>
+{% else %}
+  <p>
+    {% blocktrans %}To log in, enter an OpenID in the box below.{% endblocktrans %}
+  </p>
+
+  {% if message %}
+  <div class="message">{{ message|escape }}</div>
+  {% endif %}
+
+  {% if error %}
+  <div class="error">{{ error|escape }}</div>
+  {% endif %}
+
+  {% if failure_reason %}
+  <div class="error">{{ failure_reason|escape }}</div>
+  {% endif %}
+
+  <form method="post" action="{{ consumer_url }}">
+    <table>
+    {{ form }}
+    </table>
+    <input type="submit" value="{% trans "Log in" %}" />
+  </form>
+{% endif %}
+
+{% endblock %}
