@@ -32,7 +32,7 @@ setup(
         'django-appconf',
 
         # OpenID
-        'openid',
+        'python-openid',
     ],
     classifiers=[
         "Development Status :: 4 - Beta",
