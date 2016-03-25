@@ -23,7 +23,7 @@ class LdapBackend:
         try:
             ldapuser = "uid=%s,%s" % (username, settings.PAPAYA_LDAP_USERS_DN)
             l.simple_bind_s(ldapuser, password)
-            query = self.prepare_query('(uid=%s)', username)
+            query = self.prepare_query('(uid=%s)', [username])
 
             uid, entry = l.search_s(settings.PAPAYA_LDAP_USERS_DN, ldap.SCOPE_SUBTREE, query)[0]
         except ldap.LDAPError as e:
