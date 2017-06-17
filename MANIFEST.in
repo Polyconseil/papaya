@@ -1,9 +1,11 @@
-include INSTALL LICENSE README.rst
+include COPYING INSTALL LICENSE README.rst
 include requirements*.txt
 
 graft papaya
-global-exclude *.py[cod] __pycache__
 
-prune docs
-exclude example_settings.ini Makefile manage.py
-exclude .coveragerc release.conf runtests.py
+prune dev
+prune tests
+
+global-exclude *.py[cod] __pycache__ *.swp
+
+exclude manage.py Makefile tox.ini .flake8 .travis.yml

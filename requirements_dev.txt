@@ -1,0 +1,7 @@
+-e .
+
+volatildap
+
+check_manifest
+flake8
+tox
