@@ -1,6 +1,25 @@
 papaya
 ======
 
+.. image:: https://secure.travis-ci.org/Polyconseil/papaya.png?branch=master
+    :target: http://travis-ci.org/Polyconseil/papaya/
+
+.. image:: https://img.shields.io/pypi/v/papaya.svg
+    :target: https://pypi.python.org/pypi/papaya/
+    :alt: Latest Version
+
+.. image:: https://img.shields.io/pypi/pyversions/papaya.svg
+    :target: https://pypi.python.org/pypi/papaya/
+    :alt: Supported Python versions
+
+.. image:: https://img.shields.io/pypi/wheel/papaya.svg
+    :target: https://pypi.python.org/pypi/papaya/
+    :alt: Wheel status
+
+.. image:: https://img.shields.io/pypi/l/papaya.svg
+    :target: https://pypi.python.org/pypi/papaya/
+    :alt: License
+
 This django-backed library is intended as an authentication provider within an organization's internal services.
 
 It contains:
