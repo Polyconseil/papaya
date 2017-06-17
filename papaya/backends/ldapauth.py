@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import ldap
+import ldap.filter
 
 from papaya.conf import settings
 from django.contrib.auth.models import User, Group
@@ -35,7 +36,7 @@ class LdapBackend:
             try:
                 user = User.objects.get(username=username)
             except User.DoesNotExist:
-                user = User.objects.create_user(username, entry['mail'][0])
+                user = User.objects.create_user(username, entry['mail'][0].decode('utf-8'))
 
             # update user fiels
             user.first_name = entry['givenName'][0].decode("utf-8")
@@ -43,7 +44,7 @@ class LdapBackend:
 
             # get groups
             for uid, entry in l.search_s(settings.PAPAYA_LDAP_GROUPS_DN, ldap.SCOPE_SUBTREE, '(objectClass=posixGroup)'):
-                if entry.has_key('cn') and entry.has_key('memberUid'):
+                if 'cn' in entry and 'memberUid' in entry:
                     groupname = entry['cn'][0].decode('utf-8')
 
                     # find group
