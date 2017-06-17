@@ -1,11 +1,12 @@
 
-from django.conf.urls.defaults import *
+from django.conf.urls import url
+from . import views
 
-urlpatterns = patterns('papaya.server.views',
-    (r'^$', 'server'),
-    (r'^xrds/$', 'idpXrds'),
-    (r'^processTrustResult/$', 'processTrustResult'),
-    (r'^endpoint/$', 'endpoint'),
-    (r'^trust/$', 'trustPage'),
-    (r'^(?P<user>\w+)', 'idPage'),
-)
+urlpatterns = [
+    url(r'^$', views.server),
+    url(r'^xrds/$', views.idpXrds),
+    url(r'^processTrustResult/$', views.processTrustResult),
+    url(r'^endpoint/$', views.endpoint),
+    url(r'^trust/$', views.trustPage),
+    url(r'^(?P<user>\w+)', views.idPage),
+]

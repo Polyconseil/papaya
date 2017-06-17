@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 
+
 class OpenIDBackend:
         """
         Authenticate against OpenID.
@@ -27,4 +28,3 @@ class OpenIDBackend:
                 return User.objects.get(pk=user_id)
             except User.DoesNotExist:
                 return None
-

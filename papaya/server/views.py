@@ -35,6 +35,7 @@ from openid.consumer.discover import OPENID_IDP_2_0_TYPE
 from openid.extensions import sreg
 from openid.fetchers import HTTPFetchingError
 
+
 def getOpenIDStore():
     """
     Return an OpenID store object fit for the currently-chosen
@@ -42,11 +43,13 @@ def getOpenIDStore():
     """
     return util.getOpenIDStore('/tmp/djopenid_s_store', 's_')
 
+
 def getServer(request):
     """
     Get a Server object to perform OpenID authentication.
     """
     return Server(getOpenIDStore(), getViewURL(request, endpoint))
+
 
 def setRequest(request, openid_request):
     """
@@ -57,11 +60,13 @@ def setRequest(request, openid_request):
     else:
         request.session['openid_request'] = None
 
+
 def getRequest(request):
     """
     Get an openid request from the session, if any.
     """
     return request.session.get('openid_request')
+
 
 def server(request):
     """
@@ -72,6 +77,7 @@ def server(request):
         'server/index.html',
         {'server_xrds_url': getViewURL(request, idpXrds)})
 
+
 def idpXrds(request):
     """
     Respond to requests for the IDP's XRDS document, which is used in
@@ -79,6 +85,7 @@ def idpXrds(request):
     """
     return util.renderXRDS(
         request, [OPENID_IDP_2_0_TYPE], [getViewURL(request, endpoint)])
+
 
 def idPage(request, user):
     """
@@ -90,6 +97,7 @@ def idPage(request, user):
         {'server_url': getViewURL(request, endpoint),
          'server_user': user})
 
+
 def trustPage(request):
     """
     Display the trust page template, which allows the user to decide
@@ -98,7 +106,8 @@ def trustPage(request):
     return direct_to_template(
         request,
         'server/trust.html',
-        {'trust_handler_url':getViewURL(request, processTrustResult)})
+        {'trust_handler_url': getViewURL(request, processTrustResult)})
+
 
 def endpoint(request):
     """
@@ -112,7 +121,7 @@ def endpoint(request):
     # library can use.
     try:
         openid_request = s.decodeRequest(query)
-    except ProtocolError, why:
+    except ProtocolError as why:
         # This means the incoming request was invalid.
         return direct_to_template(
             request,
@@ -143,6 +152,7 @@ def endpoint(request):
         # server handle this.
         openid_response = s.handleRequest(openid_request)
         return displayResponse(request, openid_response)
+
 
 # Login is checked just before calling this function.
 def handleCheckIDRequest(request, openid_request):
@@ -189,6 +199,7 @@ def handleCheckIDRequest(request, openid_request):
         setRequest(request, openid_request)
         return showDecidePage(request)
 
+
 def showDecidePage(request):
     """
     Render a page to the user so a trust decision can be made.
@@ -214,20 +225,22 @@ def showDecidePage(request):
 
     try:
         # Stringify because template's ifequal can only compare to strings.
-        trust_root_valid = verifyReturnTo(trust_root, return_to) \
-                           and "Valid" or "Invalid"
-    except DiscoveryFailure, err:
+        trust_root_valid = 'Valid' if verifyReturnTo(trust_root, return_to) else 'Invalid'
+    except DiscoveryFailure as err:
         trust_root_valid = "DISCOVERY_FAILED"
-    except HTTPFetchingError, err:
+    except HTTPFetchingError as err:
         trust_root_valid = "Unreachable"
 
     return direct_to_template(
         request,
         'server/trust.html',
-        {'trust_root': trust_root,
-         'trust_handler_url':getViewURL(request, processTrustResult),
-         'trust_root_valid': trust_root_valid,
-         })
+        {
+            'trust_root': trust_root,
+            'trust_handler_url': getViewURL(request, processTrustResult),
+            'trust_root_valid': trust_root_valid,
+        },
+    )
+
 
 @login_required
 def processTrustResult(request):
@@ -253,13 +266,14 @@ def processTrustResult(request):
             'fullname': request.user.get_full_name(),
             'nickname': request.user.username,
             'email': request.user.email,
-            }
+        }
 
         sreg_req = sreg.SRegRequest.fromOpenIDRequest(openid_request)
         sreg_resp = sreg.SRegResponse.extractResponse(sreg_req, sreg_data)
         openid_response.addExtension(sreg_resp)
 
     return displayResponse(request, openid_response)
+
 
 def displayResponse(request, openid_response):
     """
@@ -273,7 +287,7 @@ def displayResponse(request, openid_response):
     # Encode the response into something that is renderable.
     try:
         webresponse = s.encodeResponse(openid_response)
-    except EncodingError, why:
+    except EncodingError as why:
         # If it couldn't be encoded, display an error.
         text = why.response.encodeToKVForm()
         return direct_to_template(

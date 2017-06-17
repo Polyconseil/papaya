@@ -40,7 +40,6 @@ class LdapBasedTestCase(django_test.TestCase):
         settings.PAPAYA_LDAP_SERVER_URI = self.ldap_server.uri
 
 
-
 # Tests
 # =====
 

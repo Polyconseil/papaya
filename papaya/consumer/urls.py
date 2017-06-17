@@ -1,7 +1,9 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import url
 
-urlpatterns = patterns('papaya.consumer.views',
-    (r'^login/$', 'startOpenID'),
-    (r'^finish/$', 'finishOpenID'),
-    (r'^xrds/$', 'rpXRDS'),
-)
+from . import views
+
+urlpatterns = [
+    url(r'^login/$', views.startOpenID),
+    url(r'^finish/$', views.finishOpenID),
+    url(r'^xrds/$', views.rpXRDS),
+]

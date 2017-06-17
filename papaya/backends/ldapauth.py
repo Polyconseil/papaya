@@ -6,6 +6,7 @@ import ldap.filter
 from papaya.conf import settings
 from django.contrib.auth.models import User, Group
 
+
 class LdapBackend:
     """
     Authenticate against LDAP.
@@ -43,7 +44,8 @@ class LdapBackend:
             user.last_name = entry['sn'][0].decode("utf-8")
 
             # get groups
-            for uid, entry in l.search_s(settings.PAPAYA_LDAP_GROUPS_DN, ldap.SCOPE_SUBTREE, '(objectClass=posixGroup)'):
+            group_results = l.search_s(settings.PAPAYA_LDAP_GROUPS_DN, ldap.SCOPE_SUBTREE, '(objectClass=posixGroup)')
+            for uid, entry in group_results:
                 if 'cn' in entry and 'memberUid' in entry:
                     groupname = entry['cn'][0].decode('utf-8')
 
@@ -72,4 +74,3 @@ class LdapBackend:
             return User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return None
-

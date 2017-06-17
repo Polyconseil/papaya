@@ -10,6 +10,7 @@ REALM_CHOICES = settings.PAPAYA_CONSUMER_REALMS
 class LoginBasicForm(forms.Form):
     openid_identifier = forms.URLField(widget=forms.TextInput(attrs={'size': 40}))
 
+
 class LoginSelectForm(forms.Form):
     username = forms.CharField(label=_('Username'))
     password = forms.ChoiceField(choices=REALM_CHOICES, label=_('Company'))

@@ -17,6 +17,7 @@ from openid.server.trustroot import RP_RETURN_TO_URL_TYPE
 from papaya import util
 from papaya.consumer.forms import LoginForm
 
+
 # List of (name, uri) for use in generating the request form.
 def getOpenIDStore():
     """
@@ -25,19 +26,22 @@ def getOpenIDStore():
     """
     return util.getOpenIDStore('/tmp/djopenid_c_store', 'c_')
 
+
 def getConsumer(request):
     """
     Get a Consumer object to perform OpenID authentication.
     """
     return consumer.Consumer(request.session, getOpenIDStore())
 
+
 def renderIndexPage(request, **template_args):
     template_args['consumer_url'] = util.getViewURL(request, startOpenID)
 
-    response =  direct_to_template(
+    response = direct_to_template(
         request, 'consumer/index.html', template_args)
     response[YADIS_HEADER_NAME] = util.getViewURL(request, rpXRDS)
     return response
+
 
 def startOpenID(request):
     """
@@ -78,7 +82,7 @@ def startOpenID(request):
 
         try:
             auth_request = c.begin(openid_url)
-        except DiscoveryFailure, e:
+        except DiscoveryFailure as e:
             # Some other protocol-level failure occurred.
             error = _("OpenID discovery error: %s") % (str(e),)
 
@@ -113,10 +117,11 @@ def startOpenID(request):
                                                 False, {'id': form_id})
             return direct_to_template(
                 request, 'consumer/request_form.html', {'html': form_html})
-    elif request.GET and request.GET.has_key('next'):
+    elif request.GET and 'next' in request.GET:
         request.session['next'] = request.GET['next']
-        
+
     return renderIndexPage(request, form=form)
+
 
 def finishOpenID(request):
     """
@@ -152,7 +157,7 @@ def finishOpenID(request):
             user = auth.authenticate(sreg_response=sreg_response)
             if user is not None:
                 auth.login(request, user)
-            if request.session.has_key('next'):
+            if 'next' in request.session:
                 next = request.session['next']
                 del request.session['next']
             else:
@@ -161,16 +166,15 @@ def finishOpenID(request):
 
         # Map different consumer status codes to template contexts.
         results = {
-            consumer.CANCEL:
-            {'message': _('OpenID authentication cancelled.')},
+            consumer.CANCEL: {'message': _('OpenID authentication cancelled.')},
 
-            consumer.FAILURE:
-            {'error': _('OpenID authentication failed.')},
+            consumer.FAILURE: {'error': _('OpenID authentication failed.')},
 
-            consumer.SUCCESS:
-            {'url': response.getDisplayIdentifier(),
-             'sreg': sreg_response and sreg_response.items()}
-            }
+            consumer.SUCCESS: {
+                'url': response.getDisplayIdentifier(),
+                'sreg': sreg_response and sreg_response.items(),
+            },
+        }
 
         result = results[response.status]
 
@@ -182,6 +186,7 @@ def finishOpenID(request):
             result['failure_reason'] = response.message
 
     return renderIndexPage(request, **result)
+
 
 def rpXRDS(request):
     """
